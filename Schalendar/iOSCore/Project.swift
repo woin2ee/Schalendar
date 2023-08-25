@@ -17,7 +17,8 @@ var defaultDependencies: [TargetDependency] = [
     .external(name: ExternalDependencyName.swinject),
     .external(name: ExternalDependencyName.rxUtility),
 ]
-let testTargetDependencies: [TargetDependency] = defaultDependencies + [
+let testTargetDependencies: [TargetDependency] = [
+    .target(name: frameworkName),
     .external(name: ExternalDependencyName.rxTest),
 ]
 

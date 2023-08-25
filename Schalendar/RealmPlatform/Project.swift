@@ -11,7 +11,8 @@ let defaultDependencies: [TargetDependency] = [
     .package(product: ExternalDependencyName.realmSwift),
     .external(name: ExternalDependencyName.rxSwift),
 ]
-let testTargetDependencies: [TargetDependency] = defaultDependencies + [
+let testTargetDependencies: [TargetDependency] = [
+    .target(name: frameworkName),
     .external(name: ExternalDependencyName.rxBlocking),
 ]
 let packages: [Package] = [
