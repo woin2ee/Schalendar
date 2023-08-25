@@ -21,11 +21,17 @@ public final class ScheduleRepository: Domain.ScheduleRepository {
     
     public func save(schedule: Domain.Schedule) -> RxSwift.Single<Void> {
         return .create { observer in
-            try? self.realm.write {
-                self.realm.add(schedule.toObjectModel()) // 수정까지?
+            #if DEBUG
+                print("\(#file):\(#line):\(#function) - isMainThread? : \(Thread.isMainThread)")
+            #endif
+            do {
+                try self.realm.write {
+                    self.realm.add(schedule.toObjectModel()) // 수정까지?
+                }
                 observer(.success(()))
+            } catch let error {
+                observer(.failure(error))
             }
-            observer(.failure(ScheduleRepositoryError.notSaved))
             return Disposables.create()
         }
     }
@@ -41,13 +47,17 @@ public final class ScheduleRepository: Domain.ScheduleRepository {
     
     public func delete(byObjectID objectID: UUID) -> RxSwift.Single<Void> {
         return .create { observer in
-            try? self.realm.write {
-                if let schedule = self.realm.object(ofType: Schedule.self, forPrimaryKey: objectID) {
-                    self.realm.delete(schedule)
-                    observer(.success(()))
+            do {
+                guard let schedule = self.realm.object(ofType: Schedule.self, forPrimaryKey: objectID) else {
+                    throw ScheduleRepositoryError.notMatchedObjectID(type: Schedule.self, objectID: objectID)
                 }
+                try self.realm.write {
+                    self.realm.delete(schedule)
+                }
+                observer(.success(()))
+            } catch let error {
+                observer(.failure(error))
             }
-            observer(.failure(ScheduleRepositoryError.notDeleted))
             return Disposables.create()
         }
     }

@@ -10,6 +10,7 @@
 import RxSwift
 import RxCocoa
 import RxTest
+import RxUtility
 import Utility
 import XCTest
 

@@ -7,10 +7,13 @@
 //
 
 import Foundation
+import Realm
+import RealmSwift
 
 enum ScheduleRepositoryError: Error {
     
     case notSaved
     case notDeleted
+    case notMatchedObjectID(type: Object.Type, objectID: UUID)
     
 }
